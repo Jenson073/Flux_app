@@ -1,0 +1,36 @@
+I need to create a accounting automation system where these are the requirements 
+I need to have a main page where we can upload invoices, receipts and expense files(.xlsx,.pdf) and another upload area for uploading bank statement on uploading the data from documents should be extracted and displayed like below for each category
+invoice {bill from, invoice no, due date, description(refers to the items,products), total due}
+expense {bill from , pay date, pay terms, description, total pay}
+receipt {Invoice no, bill from, payment date, total pay,remaining -> match the invoice no and subtract with the total due and payment}
+bank statement {date, payment term, withdrawals, deposits , balance}
+once these are generated these should be stored in the database and then displayed in the transactions page 
+Important note for bank statement; there should always be a single statement if another is uploaded delete the previous one and replace that with the new one
+Then we should check the match for the receipt, expense to bank statement where we need to compare them based on amt,date and payment terms and provide a confidence score for each match and provide them as possible matches only if the score is greater than 60% and listed for approval page in which we can approve or reject the match and once approved or rejected it should not be again listed in the possible matches. 
+the confidence score should be like higher for same amt , and little bit lesser amt difference of lets say 100 (understand the context) and keep the maximum priority for the amount for 45%,then the date for 35% and then the payment terms for 20 % calculate a formula for this to an extend like amt differs by 50 then the match is 40% probabily.
+Then we need to categorise on different page like the transactions based on 
+Transaction Description Suggested Category
+Salary Payment 		Payroll Expense
+Electricity 		Bill Utilities
+Office Supply Purchase 	Office Expenses
+Customer Payment 	Sales Revenue
+Then detect some anamolies like duplicate invoices, category expense larger than normal or high ; these are all should be detected and then displayed in the approval page for verification. 
+atlast most important is that everything should be audit logged with timestamp.
+so the main page would be the uploads page with split up for documents and bank statements then extracted data should be displayed there and all the documents in the transactions page then matches page where the statement is listed with possible matches then passed to the approval page then a categorisation page anomolies page these pages should have a button to pass then things which are not yet been to approval page approved things are listed in their respective pages if anything is rejected give a proper text description then there should be a audit page with every log data.
+make sure the ui is professional and appealing and the backend is working correctly with a mongodb connection use react/node.js/express.js 
+PORT=5000
+
+MONGO_URI=mongodb+srv://id:6973@cluster0.fdcnt.mongodb.net/?appName=Cluster0
+
+I need a option to download the document for respective transaction in the transaction section also edit option to modify the data and also include the display of bank statement in that page (no modification for bank statement)
+In the smart matching add button at the bottom like "all to approval page" to move all the possible matches to approval page
+In the categorisation page dont list everything as table first show Suggested category and once it is verified from the suggested it can be listed under the selected category preserve the feature for user to override the suggesion.
+Transactions page dont need any field like status
+Once a possible match is approved from the approval queue it should be listed under matched transactions in the transactions page but dont remove it from other expense or receipt lists
+Another small change is that for the anomalies listed for approval queue must be provided different buttons like No Risk, Alert!
+A new page for alerts should be created it should contain invoices without a valid receipt payment how to check this -> match the invoice no from the invoice and receipt then check the remaining payment of the reciept if it is not zero or if there is no receipt with the invoice no all these conditions with the invoice due date is within 15 days then the invoice should be alerted 
+If Alert! is chosen for a anomaly in approval queue then it should also be listed in the alerts page 
+If the receipt with an invoice and remaining pay is greater than 0 then mark the receipt as partial pay
+
+Dont include bank statement data for categorisation page only categorise invoices, receipts, expenses and it would be better if there is one combined list grid with all like suggested, office expense, sales revenue etc instead of 2 suggested and verified ui.
+And another important thing is that in the smart matching check a condition that if a receipt is matched with a bank record then the bank record should be in the credited or deposit side and for a expense the bank record should be in the withdrawal or debit side this condition is a must case if this is not matching then it should not even be listed in the possible matches
